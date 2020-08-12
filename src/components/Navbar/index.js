@@ -1,40 +1,61 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import "./style.css";
+import ListHeader from '../ListHeader';
 
-// Depending on the current path, this component sets the "active" class on the appropriate navigation link item
-function Navbar() {
-  return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
-      <Link className="navbar-brand" to="/">
-        Wikipedia Searcher
-      </Link>
-      <div>
-        <ul className="navbar-nav">
-          <li className="nav-item">
-            <Link
-              to="/"
-              className={
-                window.location.pathname === "/" || window.location.pathname === "/home"
-                  ? "nav-link active"
-                  : "nav-link"
-              }
-            >
-              Home
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link
-              to="/signup"
-              className={window.location.pathname === "/signup" ? "nav-link active" : "nav-link"}
-            >
-              Sign Up
-            </Link>
-          </li>
-        </ul>
-      </div>
-    </nav>
-  );
+class Navbar extends React.Component {
+
+    state = {
+        searchTerm: "",
+        filteredEmployees: []
+    };
+
+    componentDidMount() {
+        if (this.state.filteredEmployees.length < 1) {
+            this.setState({
+                filteredEmployees: this.props.employees
+            })
+        }
+    }
+
+
+    handleInputChange = event => {
+        this.setState({
+            searchTerm: event.target.value
+        });
+        let userTyped = event.target.value;
+        const filteredList = this.props.employees.filter((item) => {
+            let values = item.name.title + item.name.first + item.name.last + item.gender + item.dob.age + item.email + item.cell;
+            return values.indexOf(userTyped) !== -1;
+
+        });
+
+        this.setState({
+            filteredEmployees: filteredList
+
+        });
+    }
+
+    render() {
+        return (
+            <div>
+                {/* {this.fillList} */}
+                <form className="form">
+                    <input
+                        value={this.state.searchTerm}
+                        name="searchTerm"
+                        onChange={event => this.handleInputChange(event)}
+                        type="text"
+                        placeholder="Search"
+                    />
+                </form>
+                {this.state.filteredEmployees.length > 0 &&
+                    <ListHeader empList={this.state.filteredEmployees} />
+                }
+            </div>
+
+        );
+    }
 }
+
 
 export default Navbar;

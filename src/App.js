@@ -1,29 +1,34 @@
-import React from "react";
-import "./App.css";
+import React from 'react';
+import './App.css';
+import axios from "axios";
+import SiteHead from './components/SiteHead';
+import Navbar from './components/Navbar';
 
-import { BrowserRouter as Router, Route } from "react-router-dom";
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
-import Wrapper from "./components/Wrapper";
 
-import Signup from "./pages/Signup";
-import Search from "./pages/Search";
+class App extends React.Component {
 
-const App = () => {
-  document.title = "Wikipedia Searcher";
-  return (
-    <Router>
-      <div>
-        <Navbar />
-        <Wrapper>
-          <Route exact path="/" component={Search} />
-          <Route exact path="/signup" component={Signup} />
-          <Route exact path="/search" component={Search} />
-        </Wrapper>
-        <Footer />
+  state = {
+    employees: [],
+  };
+
+  componentDidMount() {
+      axios.get(`https://randomuser.me/api/?results=20&nat=Aus`)
+        .then(res => {
+          this.setState({ employees: res.data.results });
+        });
+  }
+
+
+  render() {
+    return (
+      <div className="App">
+        <SiteHead />
+        {this.state.employees.length > 0 &&
+        <Navbar employees={this.state.employees}/>
+  }
       </div>
-    </Router>
-  );
-};
+    );
+  }
+}
 
 export default App;
