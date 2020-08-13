@@ -2,6 +2,7 @@
   "name": "practiceapp",
   "version": "0.1.0",
   "private": true,
+  "main": "index.js",
   "homepage": "https://jairomartinez1994.github.io/React-Employee-Directory/",
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
